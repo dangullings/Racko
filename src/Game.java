@@ -35,7 +35,7 @@ public class Game {
 	private Card highlightedCard;
 	
 	private byte endGameStage = 0;
-	public boolean bonusMode = false;
+	private boolean bonusMode = false;
 	public boolean sound = true;
 	
 	Random rnd = new Random();
@@ -141,9 +141,9 @@ public class Game {
 			}
 		}
 		
-		 for (int i = 0; i < player.size(); i++){
-			 player.get(i).hand.setInc(numCards / 10);
-			 player.get(i).hand.setValue(4);
+		 for (Player p: player){
+			 p.hand.setInc(numCards / 10);
+			 p.hand.setValue(4);
 		 }
 	}
 
@@ -204,7 +204,7 @@ public class Game {
 			SoundEffect.EndTurn.play();
 	}
 	
-	public void drawGame(){
+	private void drawGame(){
 			
 		Racko_Main.gameBoard.clear();
 		Racko_Main.gameBoard.setPenRadius(.01);
@@ -246,7 +246,7 @@ public class Game {
 		Racko_Main.gameBoard.show(1); // 60 frames per second
 	}
 
-	public void updateCardLocation(){
+	private void updateCardLocation(){
 		for (Card c: deck.deck)
 			if (c.isHasTarget())
 				c.moveToTarget();
@@ -255,15 +255,10 @@ public class Game {
 			if (c.isHasTarget())
 				c.moveToTarget();
 		
-		for (int p = 0; p < numPlayers; p++){
-			if (player.get(p).hand.cards.isEmpty())
-				continue;
-			for (Card c: player.get(p).hand.cards)
-				if (p >= numPlayers)
-					break;
-				else
-					if (c.isHasTarget())
-						c.moveToTarget();
+		for (Player p: player){
+			for (Card c: p.hand.cards)
+				if (c.isHasTarget())
+					c.moveToTarget();
 		}
 	}
 	
@@ -327,7 +322,7 @@ public class Game {
 		TimerAi();
 	}
 	
-	public void endHand(Player winner) {
+	private void endHand(Player winner) {
 		int score = 0;
 
 		numHands++;
@@ -393,7 +388,7 @@ public class Game {
 		TimerEndHand(winner);
 	}
 	
-	public void TimerMenu() {
+	private void TimerMenu() {
 		timerMenu.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				
@@ -484,7 +479,7 @@ public class Game {
 		}, menuDelay, menuPeriod);
 	}
 	
-	public void TimerDealHand() {
+	private void TimerDealHand() {
 		timerDealHand.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				
@@ -523,7 +518,7 @@ public class Game {
 		}, dealHandDelay, dealHandPeriod);
 	}
 	
-	public void TimerAi() {
+	private void TimerAi() {
 		timerAi.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 
@@ -648,7 +643,7 @@ public class Game {
 		TimerMenu();
 	}
 	
-	public void TimerEndHand(Player winner) {
+	private void TimerEndHand(Player winner) {
 		timerEndHand.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				
@@ -790,10 +785,10 @@ public class Game {
 					if (gameWinner.getTotalScore() >= Racko_Main.scoreWin){
 						gameStatus = GameStatus.END_GAME;
 						
-						System.out.println("p1 "+player.get(0).getMoveCountAvg());
-						System.out.println("p2 "+player.get(1).getMoveCountAvg());
-						System.out.println("p3 "+player.get(2).getMoveCountAvg());
-						System.out.println("p4 "+player.get(3).getMoveCountAvg());
+						//System.out.println("p1 "+player.get(0).getMoveCountAvg());
+						//System.out.println("p2 "+player.get(1).getMoveCountAvg());
+						//System.out.println("p3 "+player.get(2).getMoveCountAvg());
+						//System.out.println("p4 "+player.get(3).getMoveCountAvg());
 						
 						gameWinner.txtGameScore.setActualColor(Color.WHITE);
 						gameWinner.txtGameScore.setSetColor(Color.ORANGE);
@@ -873,7 +868,7 @@ public class Game {
 		}, endHandDelay, endHandPeriod);
 	}
 	
-	public void TimerEndGame(Player gameWinner) {
+	private void TimerEndGame(Player gameWinner) {
 		timerEndGame.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				Card card;
@@ -930,7 +925,7 @@ public class Game {
 		}, endGameDelay, endGamePeriod);
 	}
 	
-	public Player getHighScore(){
+	private Player getHighScore(){
 		Player gameWinner = null;
 		int highScore = 0;
 		
@@ -947,7 +942,7 @@ public class Game {
 		return playerTurn;
 	}
 
-	public void setPlayerTurn(int i) {
+	private void setPlayerTurn(int i) {
 		this.playerTurn = i;
 	}
 
